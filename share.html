@@ -28,33 +28,89 @@
 
     <section class="card" aria-labelledby="guest-book">
       <h2 id="guest-book">Guest Book</h2>
-      <p class="status-banner">
-        The public guest book and photo upload are being connected. Please check back soon.
+      <p class="status-banner success-banner">
+        The guest book is open. You may share a memory, leave contact information for family updates,
+        and optionally upload one photo for the family to review.
       </p>
-      <form class="condolence-form" name="victoria-guestbook-photo-share">
+      <form class="condolence-form" name="victoria-guestbook-photo-share" id="guestbook-form" data-endpoint="https://script.google.com/macros/s/AKfycbx1gmgJ0yJI8JuCsxDnasgsWLEL1YlyabbAAXDCj6OumPc0YPbPFpmHCvH0hrRWNEoEeg/exec">
+        <input type="hidden" name="source" value="bettys-place-guestbook" />
         <label>Your name <span aria-hidden="true">*</span><input type="text" name="name" autocomplete="name" required placeholder="Full name" /></label>
         <div class="form-grid">
           <label>Email address<input type="email" name="email" autocomplete="email" placeholder="your@email.com" /></label>
           <label>Phone number<input type="tel" name="phone" autocomplete="tel" placeholder="(555) 555-5555" /></label>
         </div>
-        <label>Message or memory<textarea name="message" rows="6" placeholder="Share a memory, condolence, or note for the family."></textarea></label>
-        <label>Photo to share<input type="file" name="photo" accept="image/*" /></label>
+        <label>Relationship / how you knew Betty<input type="text" name="relationship" placeholder="Family, friend, colleague, neighbor…" /></label>
+        <label>Message, prayer, or memory <span aria-hidden="true">*</span><textarea name="message" rows="6" required placeholder="Share a memory, condolence, prayer, or note for the family."></textarea></label>
+        <label>Photo to share <span class="field-note">optional, one image up to 8 MB</span><input type="file" name="photo" accept="image/*" /></label>
         <fieldset>
-          <legend>Updates</legend>
+          <legend>Permissions</legend>
           <label class="checkbox"><input type="checkbox" name="update_permission" value="yes" /> Yes, the family may contact me with memorial updates.</label>
+          <label class="checkbox"><input type="checkbox" name="public_permission" value="yes" /> The family may share my message/photo publicly on Betty’s Place after review.</label>
         </fieldset>
-        <p class="privacy-note">Contact information will be used only by the Satorre family for memorial-related updates.</p>
-        <button type="submit" disabled aria-disabled="true">Guest Book Opening Soon</button>
+        <p class="privacy-note">Contact information will be used only by the Satorre family for memorial-related updates. Shared photos and messages will be reviewed before any public display.</p>
+        <button type="submit">Sign the Guest Book</button>
+        <p class="form-status" id="guestbook-status" role="status" aria-live="polite"></p>
       </form>
     </section>
 
     <section class="card" aria-labelledby="backend-needed">
       <h2 id="backend-needed">Photo Sharing Status</h2>
       <p>
-        This page is ready visually. To accept live entries and photos from guests, the site needs a form backend
-        connected to the private guest book Sheet and a private family photo folder.
+        Guest book entries are saved privately for the Satorre family. Photos submitted here are uploaded
+        to the family’s private review folder before any selected images are added to the public gallery.
       </p>
     </section>
   </main>
+
+  <script>
+    const form = document.getElementById('guestbook-form');
+    const statusEl = document.getElementById('guestbook-status');
+
+    async function fileToBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(String(reader.result).split(',')[1] || '');
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const submitButton = form.querySelector('button[type="submit"]');
+      const endpoint = form.dataset.endpoint;
+      const formData = new FormData(form);
+      const photo = form.querySelector('input[name="photo"]').files[0];
+
+      statusEl.textContent = '';
+      if (photo) {
+        if (photo.size > 8 * 1024 * 1024) {
+          statusEl.textContent = 'Please choose a photo smaller than 8 MB.';
+          return;
+        }
+        statusEl.textContent = 'Preparing your photo…';
+        formData.delete('photo');
+        formData.append('photo_base64', await fileToBase64(photo));
+        formData.append('photo_filename', photo.name);
+        formData.append('photo_mime_type', photo.type || 'application/octet-stream');
+      }
+
+      submitButton.disabled = true;
+      submitButton.textContent = 'Sending…';
+      statusEl.textContent = 'Sending your guest book entry…';
+
+      try {
+        await fetch(endpoint, { method: 'POST', mode: 'no-cors', body: formData });
+        form.reset();
+        statusEl.textContent = 'Thank you. Your memory has been sent to the Satorre family.';
+        submitButton.textContent = 'Sent';
+      } catch (error) {
+        statusEl.textContent = 'Something went wrong. Please try again in a moment.';
+        submitButton.disabled = false;
+        submitButton.textContent = 'Sign the Guest Book';
+      }
+    });
+  </script>
+
 </body>
 </html>

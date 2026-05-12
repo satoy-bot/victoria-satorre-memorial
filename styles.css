@@ -432,3 +432,22 @@ body::before {
   background:
     linear-gradient(135deg, rgba(255,253,248,.96), rgba(255,244,220,.78));
 }
+
+.success-banner {
+  color: #3f5f37;
+  background: #eef8e9;
+  border-color: #b9d7ae;
+}
+
+.field-note {
+  color: var(--muted);
+  font-size: .82rem;
+  font-weight: 500;
+}
+
+.form-status {
+  margin: 0;
+  color: var(--muted);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-weight: 700;
+}
