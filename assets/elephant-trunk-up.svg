@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 180" role="img" aria-labelledby="title desc">
+  <title id="title">Trunk-up elephant</title>
+  <desc id="desc">A simple line-art elephant with its trunk raised upward.</desc>
+  <path d="M46 94c0-36 30-62 70-62 38 0 62 24 62 55v18c0 21-17 38-38 38H86c-23 0-40-18-40-49Z" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M169 81c20-20 18-48 0-58-13-7-29 2-28 18 1 17 16 19 26 10" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M60 103c-18-2-30 8-31 22-1 15 10 27 25 25 13-2 22-13 22-26" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M83 143v21M139 143v21M88 164h20M137 164h20" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="143" cy="73" r="4" fill="currentColor"/>
+  <path d="M103 79c-13 6-24 5-34-3" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round"/>
+</svg>
