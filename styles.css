@@ -427,3 +427,8 @@ body::before {
     margin-right: auto;
   }
 }
+
+.gratitude-card {
+  background:
+    linear-gradient(135deg, rgba(255,253,248,.96), rgba(255,244,220,.78));
+}
