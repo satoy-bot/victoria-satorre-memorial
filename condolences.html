@@ -9,6 +9,14 @@
 </head>
 <body>
   <main class="page">
+
+    <nav class="site-nav" aria-label="Memorial site navigation">
+      <a href="index.html">Home</a>
+      <a href="livestream.html">Livestream</a>
+      <a href="announcements.html">Announcements</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="share.html">Guest Book &amp; Photos</a>
+    </nav>
     <section class="hero compact" aria-labelledby="title">
       <p class="eyebrow">For Family &amp; Friends</p>
       <h1 id="title">Share a Memory of Victoria</h1>
@@ -22,12 +30,14 @@
 
     <section class="card" aria-labelledby="form-title">
       <h2 id="form-title">Memories &amp; Contact</h2>
+      <p class="status-banner">
+        Family review draft: this form layout is prepared, but online submission is not active yet.
+        Until the Google Sheets backend is connected, condolence messages should be collected manually
+        and entered into the private family Sheet.
+      </p>
 
-      <form class="condolence-form" name="victoria-condolences" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+      <form class="condolence-form" name="victoria-condolences">
         <input type="hidden" name="source" value="memorial-site" />
-        <p class="hidden">
-          <label>Do not fill this out: <input name="bot-field" /></label>
-        </p>
 
         <label>
           Your name <span aria-hidden="true">*</span>
@@ -65,7 +75,7 @@
           and will not be shared publicly.
         </p>
 
-        <button type="submit">Send to the Family</button>
+        <button type="submit" disabled aria-disabled="true">Submission Backend Pending</button>
       </form>
     </section>
 

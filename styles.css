@@ -223,3 +223,97 @@ button:hover,
   .form-grid { grid-template-columns: 1fr; }
   button, .button-link { width: 100%; text-align: center; }
 }
+
+.status-banner {
+  margin: 0 0 24px;
+  padding: 14px 16px;
+  color: #5f4b2b;
+  background: #fff4dc;
+  border: 1px solid #ead09c;
+  border-radius: 16px;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: .95rem;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: .58;
+}
+
+.hero-photo {
+  width: min(620px, 100%);
+  margin: 30px auto 0;
+}
+
+.hero-photo img,
+.photo-grid img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  box-shadow: 0 16px 38px rgba(80, 55, 20, .12);
+}
+
+.photo-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.photo-grid figure {
+  margin: 0;
+}
+
+.photo-grid figcaption {
+  margin-top: 10px;
+  color: var(--muted);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: .9rem;
+  text-align: center;
+}
+
+@media (max-width: 760px) {
+  .photo-grid { grid-template-columns: 1fr; }
+}
+
+.birthday-grid {
+  margin-top: 22px;
+}
+
+.birthday-grid img {
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+}
+
+.site-nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin: 0 auto 28px;
+  padding: 10px;
+  background: rgba(255, 253, 248, .72);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+}
+
+.site-nav a {
+  padding: 8px 12px;
+  color: var(--muted);
+  border-radius: 999px;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: .9rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.site-nav a:hover {
+  color: var(--ink);
+  background: #fff4dc;
+}
+
+@media (max-width: 620px) {
+  .site-nav { border-radius: 22px; }
+  .site-nav a { flex: 1 1 auto; text-align: center; }
+}

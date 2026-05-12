@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Guest Book & Photo Sharing | Victoria A. Satorre</title>
+  <meta name="description" content="Sign the guest book, leave contact information for updates, and share photos for Victoria A. Satorre's memorial." />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="page">
+
+    <nav class="site-nav" aria-label="Memorial site navigation">
+      <a href="index.html">Home</a>
+      <a href="livestream.html">Livestream</a>
+      <a href="announcements.html">Announcements</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="share.html">Guest Book &amp; Photos</a>
+    </nav>
+    <section class="hero compact" aria-labelledby="title">
+      <p class="eyebrow">Guest Book &amp; Photos</p>
+      <h1 id="title">Share a Memory</h1>
+      <p class="intro">
+        Family and friends will be able to sign the guest book, leave phone/email information for updates,
+        and share photos for the memorial gallery.
+      </p>
+    </section>
+
+    <section class="card" aria-labelledby="guest-book">
+      <h2 id="guest-book">Guest Book</h2>
+      <p class="status-banner">
+        The public guest book and photo upload are being connected. Please check back soon.
+      </p>
+      <form class="condolence-form" name="victoria-guestbook-photo-share">
+        <label>Your name <span aria-hidden="true">*</span><input type="text" name="name" autocomplete="name" required placeholder="Full name" /></label>
+        <div class="form-grid">
+          <label>Email address<input type="email" name="email" autocomplete="email" placeholder="your@email.com" /></label>
+          <label>Phone number<input type="tel" name="phone" autocomplete="tel" placeholder="(555) 555-5555" /></label>
+        </div>
+        <label>Message or memory<textarea name="message" rows="6" placeholder="Share a memory, condolence, or note for the family."></textarea></label>
+        <label>Photo to share<input type="file" name="photo" accept="image/*" /></label>
+        <fieldset>
+          <legend>Updates</legend>
+          <label class="checkbox"><input type="checkbox" name="update_permission" value="yes" /> Yes, the family may contact me with memorial updates.</label>
+        </fieldset>
+        <p class="privacy-note">Contact information will be used only by the Satorre family for memorial-related updates.</p>
+        <button type="submit" disabled aria-disabled="true">Guest Book Opening Soon</button>
+      </form>
+    </section>
+
+    <section class="card" aria-labelledby="backend-needed">
+      <h2 id="backend-needed">Photo Sharing Status</h2>
+      <p>
+        This page is ready visually. To accept live entries and photos from guests, the site needs a form backend
+        connected to the private guest book Sheet and a private family photo folder.
+      </p>
+    </section>
+  </main>
+</body>
+</html>
