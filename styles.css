@@ -317,3 +317,45 @@ button:disabled {
   .site-nav { border-radius: 22px; }
   .site-nav a { flex: 1 1 auto; text-align: center; }
 }
+
+.memory-book {
+  position: relative;
+  overflow: hidden;
+}
+
+.memory-book::before {
+  content: "";
+  position: absolute;
+  inset: 16px;
+  border: 1px dashed rgba(183, 138, 67, .38);
+  border-radius: 18px;
+  pointer-events: none;
+}
+
+.quick-links {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 22px;
+}
+
+.quick-links a {
+  padding: 12px 10px;
+  color: var(--ink);
+  background: #fff4dc;
+  border: 1px solid #ead09c;
+  border-radius: 16px;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: .92rem;
+  font-weight: 800;
+  text-align: center;
+  text-decoration: none;
+}
+
+@media (max-width: 760px) {
+  .quick-links { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 420px) {
+  .quick-links { grid-template-columns: 1fr; }
+}
