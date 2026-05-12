@@ -451,3 +451,131 @@ body::before {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   font-weight: 700;
 }
+
+/* Betty's Place v2 — elevated memory-book layout */
+.feature-links {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.feature-links a {
+  display: block;
+  min-height: 112px;
+  padding: 18px 14px;
+  color: var(--ink);
+  background: linear-gradient(180deg, #fff9ed, #fffdf8);
+  border: 1px solid #ead09c;
+  border-radius: 20px;
+  text-decoration: none;
+  box-shadow: 0 12px 28px rgba(80, 55, 20, .07);
+}
+
+.feature-links span {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--gold);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-weight: 900;
+}
+
+.feature-links small {
+  display: block;
+  color: var(--muted);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  line-height: 1.35;
+}
+
+.loved-card {
+  background: linear-gradient(135deg, rgba(255,253,248,.96), rgba(255,244,220,.65));
+}
+
+.loved-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.loved-grid div {
+  padding: 18px;
+  background: rgba(255,255,255,.58);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+}
+
+.loved-grid strong,
+.timeline-list time {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--gold);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-weight: 900;
+}
+
+.loved-grid span {
+  color: var(--muted);
+}
+
+.two-column-card {
+  display: grid;
+  grid-template-columns: 1.4fr .8fr;
+  gap: 24px;
+  align-items: center;
+}
+
+.quick-links.stacked {
+  grid-template-columns: 1fr;
+  margin-top: 0;
+}
+
+.timeline-list {
+  display: grid;
+  gap: 18px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.timeline-list li {
+  position: relative;
+  padding: 18px 18px 18px 28px;
+  background: rgba(255,250,243,.72);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+}
+
+.timeline-list li::before {
+  content: "";
+  position: absolute;
+  left: 12px;
+  top: 24px;
+  width: 7px;
+  height: 7px;
+  background: var(--gold);
+  border-radius: 50%;
+}
+
+.tribute-card {
+  background:
+    linear-gradient(135deg, rgba(255,253,248,.95), rgba(255,244,220,.65)),
+    radial-gradient(circle at top right, rgba(183, 138, 67, .16), transparent 18rem);
+}
+
+@media (max-width: 860px) {
+  .feature-links,
+  .loved-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .two-column-card {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .feature-links,
+  .loved-grid {
+    grid-template-columns: 1fr;
+  }
+}
