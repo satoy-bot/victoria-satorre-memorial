@@ -24,16 +24,16 @@
       <p class="eyebrow">Betty’s Place Guest Book</p>
       <h1 id="title">Share a Memory</h1>
       <p class="intro">
-        Family and friends will be able to sign the guest book, leave phone/email information for updates,
-        and share photos for Betty’s family memory book.
+        Family and friends can sign the guest book, share a dedication or memory,
+        leave private contact information for updates, and optionally share photos for Betty’s family memory book.
       </p>
     </section>
 
     <section class="card" aria-labelledby="guest-book">
       <h2 id="guest-book">Guest Book</h2>
       <p class="status-banner success-banner">
-        The guest book is open. You may share a memory, leave contact information for family updates,
-        and optionally upload one photo for the family to review.
+        The guest book is open. Shared memories and dedications may appear publicly on Betty’s Place after family review.
+        Contact information stays private and is used only for memorial-related updates.
       </p>
       <form class="condolence-form" name="victoria-guestbook-photo-share" id="guestbook-form" data-endpoint="https://script.google.com/macros/s/AKfycbx1gmgJ0yJI8JuCsxDnasgsWLEL1YlyabbAAXDCj6OumPc0YPbPFpmHCvH0hrRWNEoEeg/exec">
         <input type="hidden" name="source" value="bettys-place-guestbook" />
@@ -43,14 +43,14 @@
           <label>Phone number<input type="tel" name="phone" autocomplete="tel" placeholder="(555) 555-5555" /></label>
         </div>
         <label>Relationship / how you knew Betty<input type="text" name="relationship" placeholder="Family, friend, colleague, neighbor…" /></label>
-        <label>Message, prayer, or memory <span aria-hidden="true">*</span><textarea name="message" rows="6" required placeholder="Share a memory, condolence, prayer, or note for the family."></textarea></label>
+        <label>Dedication, message, prayer, or memory <span aria-hidden="true">*</span><textarea name="message" rows="6" required placeholder="Share a dedication, memory, condolence, prayer, or note for the family."></textarea></label>
         <label>Photo to share <span class="field-note">optional, one image up to 8 MB</span><input type="file" name="photo" accept="image/*" /></label>
         <fieldset>
           <legend>Permissions</legend>
           <label class="checkbox"><input type="checkbox" name="update_permission" value="yes" /> Yes, the family may contact me with memorial updates.</label>
-          <label class="checkbox"><input type="checkbox" name="public_permission" value="yes" /> The family may share my message/photo publicly on Betty’s Place after review.</label>
+          <label class="checkbox"><input type="checkbox" name="public_permission" value="yes" /> The family may share my name, relationship/location, dedication/message, and photo publicly on Betty’s Place after review.</label>
         </fieldset>
-        <p class="privacy-note">Contact information will be used only by the Satorre family for memorial-related updates. Shared photos and messages will be reviewed before any public display.</p>
+        <p class="privacy-note">Contact information will be used only by the Satorre family for memorial-related updates and will not be shown publicly. Public guest book entries are reviewed first and may show only your name, relationship/location, dedication/message, photo if approved, and date posted.</p>
         <button type="submit">Sign the Guest Book</button>
         <p class="form-status" id="guestbook-status" role="status" aria-live="polite"></p>
       </form>
@@ -59,8 +59,9 @@
     <section class="card" aria-labelledby="backend-needed">
       <h2 id="backend-needed">Photo Sharing Status</h2>
       <p>
-        Guest book entries are saved privately for the Satorre family. Photos submitted here are uploaded
-        to the family’s private review folder before any selected images are added to the public gallery.
+        Guest book entries are saved privately first. After family review, selected dedications and memories may be added
+        to the public Guest Book or Tributes page. Photos submitted here are uploaded to the family’s private review folder
+        before any selected images are added to the public gallery.
       </p>
     </section>
   </main>
