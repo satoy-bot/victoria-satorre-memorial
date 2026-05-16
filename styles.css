@@ -110,7 +110,7 @@ body::after {
   position: relative;
   overflow: hidden;
   margin-bottom: 26px;
-  padding: clamp(38px, 7vw, 68px) clamp(20px, 5vw, 54px) clamp(30px, 5vw, 48px);
+  padding: clamp(30px, 6vw, 54px) clamp(20px, 5vw, 54px) clamp(30px, 5vw, 48px);
   text-align: center;
   background:
     linear-gradient(rgba(255, 253, 248, .95), rgba(255, 253, 248, .95)),
@@ -163,7 +163,7 @@ h1 {
   display: grid;
   gap: .02em;
   justify-items: center;
-  font-size: clamp(2.2rem, 6vw, 4.55rem);
+  font-size: clamp(2rem, 5vw, 3.9rem);
   font-weight: 500;
   line-height: .92;
 }
@@ -217,6 +217,11 @@ h1 span:last-child {
   margin: 30px auto 0;
 }
 
+.hero-photo-primary {
+  width: min(430px, 88%);
+  margin-top: 22px;
+}
+
 .hero-photo img,
 .photo-grid img {
   display: block;
@@ -230,17 +235,30 @@ h1 span:last-child {
 
 .hero-photo img { padding: 8px; }
 
+.hero-photo-primary img {
+  padding: 10px;
+  border-radius: 30px;
+  box-shadow: 0 24px 54px rgba(80, 55, 20, .16);
+}
+
+.hero-title-lockup {
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
 .elephant-charm {
   display: grid;
   place-items: center;
-  width: 116px;
-  height: 116px;
-  margin: -20px auto 0;
-  padding: 10px;
+  width: 76px;
+  height: 76px;
+  margin: 0 auto;
+  padding: 7px;
   background: rgba(255, 255, 255, .92);
   border: 1px solid rgba(169, 134, 69, .28);
   border-radius: 50%;
-  box-shadow: 0 16px 34px rgba(80, 55, 20, .12);
+  box-shadow: 0 10px 22px rgba(80, 55, 20, .10);
 }
 
 .elephant-charm img,
@@ -670,6 +688,7 @@ footer {
   .site-nav { position: static; border-radius: 22px; }
   .site-nav a { flex: 1 1 auto; text-align: center; }
   .hero { border-radius: 26px; }
+  .hero-photo-primary { width: min(360px, 94%); }
   .hero::before { inset: 10px; border-radius: 18px; }
   dl > div { grid-template-columns: 1fr; gap: 4px; }
   .form-grid { grid-template-columns: 1fr; }
