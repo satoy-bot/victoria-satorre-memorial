@@ -664,6 +664,77 @@ button:disabled {
 
 .hidden { display: none; }
 
+
+/* Subtle Catholic devotional touches */
+.hero .eyebrow::before,
+.hero .eyebrow::after {
+  content: "✝︎";
+  display: inline-block;
+  margin: 0 .7em;
+  color: var(--gold-2);
+  font-size: .9em;
+  font-weight: 500;
+}
+
+.scripture-card {
+  text-align: center;
+  background:
+    linear-gradient(rgba(255, 253, 248, .96), rgba(255, 253, 248, .96)),
+    radial-gradient(circle at top, rgba(215, 189, 130, .18), transparent 18rem),
+    var(--card);
+}
+
+.scripture-card::after {
+  content: "✝︎";
+  position: absolute;
+  right: clamp(24px, 5vw, 48px);
+  bottom: clamp(18px, 4vw, 34px);
+  color: rgba(169, 134, 69, .16);
+  font-family: var(--serif);
+  font-size: clamp(4rem, 12vw, 8rem);
+  line-height: 1;
+  pointer-events: none;
+}
+
+.cross-row {
+  margin: 0 0 10px;
+  color: var(--gold-2);
+  font-family: var(--serif);
+  font-size: 1.05rem;
+  letter-spacing: .55em;
+}
+
+.scripture-card h2::after {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.scripture-card blockquote {
+  max-width: 760px;
+  margin: 0 auto;
+  color: var(--ink-soft);
+}
+
+.scripture-card blockquote p {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: clamp(1.45rem, 3.2vw, 2.18rem);
+  font-style: italic;
+  line-height: 1.28;
+}
+
+.scripture-card cite {
+  display: block;
+  margin-top: 18px;
+  color: var(--muted);
+  font-family: var(--sans);
+  font-size: .84rem;
+  font-style: normal;
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
 footer {
   padding: 28px 16px 8px;
   color: var(--muted);
