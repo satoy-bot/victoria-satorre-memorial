@@ -196,6 +196,16 @@ h1 span:last-child {
 
 .dates span { color: var(--ink-soft); }
 
+.known-as {
+  max-width: 620px;
+  margin: 14px auto 0;
+  color: var(--muted);
+  font-family: var(--serif);
+  font-size: clamp(1.08rem, 2.2vw, 1.32rem);
+  font-style: italic;
+  line-height: 1.35;
+}
+
 .divider {
   width: min(220px, 52%);
   height: 11px;
