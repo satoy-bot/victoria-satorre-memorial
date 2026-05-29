@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Upload Day-Of Photo | Betty's Place</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .upload-form { display: flex; flex-direction: column; gap: 20px; }
+    .photo-pick {
+      border: 2px dashed #b89a80;
+      border-radius: 16px;
+      padding: 32px 20px;
+      text-align: center;
+      cursor: pointer;
+      background: #fdf6ee;
+      transition: border-color .2s;
+    }
+    .photo-pick:hover { border-color: #6d4c35; }
+    .photo-pick input { display: none; }
+    .photo-pick img { max-width: 100%; max-height: 320px; border-radius: 12px; margin-top: 12px; display: none; }
+    .pick-label { font-size: 1.1rem; color: #6a5040; margin: 0; }
+    textarea {
+      border: 1px solid #d2bfad;
+      border-radius: 12px;
+      padding: 14px;
+      font: inherit;
+      font-size: 1rem;
+      width: 100%;
+      box-sizing: border-box;
+      min-height: 90px;
+      background: #fff;
+      resize: vertical;
+      color: #2d2118;
+    }
+    .upload-btn {
+      width: 100%;
+      padding: 18px;
+      font-size: 1.1rem;
+      border-radius: 999px;
+      border: none;
+      background: #6d4c35;
+      color: #fff;
+      cursor: pointer;
+      font-weight: 600;
+      letter-spacing: .02em;
+    }
+    .upload-btn:disabled { background: #b09880; cursor: not-allowed; }
+    .upload-status { text-align: center; font-size: 1rem; color: #4a3525; min-height: 1.5em; }
+    .locked-msg { text-align: center; padding: 60px 20px; color: #6a5040; }
+  </style>
+</head>
+<body>
+  <main class="page">
+
+    <nav class="site-nav" aria-label="Memorial site navigation">
+      <a href="index.html">Betty's Place</a>
+      <a href="announcements.html">Updates</a>
+      <a href="livestream.html">Livestream</a>
+      <a href="live.html">Day Of</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="share.html">Guest Book</a>
+      <a href="timeline.html">Timeline</a>
+      <a href="tributes.html">Tributes</a>
+    </nav>
+
+    <section class="hero compact" aria-labelledby="title">
+      <p class="eyebrow">Family Upload</p>
+      <h1 id="title">Share a Day-Of Photo</h1>
+    </section>
+
+    <section class="card" id="upload-card" style="display:none">
+      <p>Photos you upload here appear on the <a href="live.html">Day Of</a> page for family and friends watching online.</p>
+      <div class="upload-form">
+
+        <div class="photo-pick" id="pick-area" onclick="document.getElementById('photo-input').click()">
+          <p class="pick-label" id="pick-label">📷 Tap to choose a photo</p>
+          <input type="file" id="photo-input" accept="image/*" />
+          <img id="preview" alt="Preview of selected photo" />
+        </div>
+
+        <textarea id="caption" placeholder="Caption (optional) — e.g. "Outside the church before the service""></textarea>
+
+        <button class="upload-btn" id="upload-btn" onclick="upload()">Upload Photo</button>
+        <p class="upload-status" id="upload-status" aria-live="polite"></p>
+      </div>
+    </section>
+
+    <section class="card locked-msg" id="locked-card">
+      <p>This page is for family use only.</p>
+    </section>
+
+  </main>
+
+  <script>
+    const ENDPOINT = 'https://script.google.com/macros/s/AKfycbx1gmgJ0yJI8JuCsxDnasgsWLEL1YlyabbAAXDCj6OumPc0YPbPFpmHCvH0hrRWNEoEeg/exec';
+    const VALID_TOKEN = 'betty2026';
+
+    const urlToken = new URLSearchParams(location.search).get('token');
+    if (urlToken === VALID_TOKEN) {
+      document.getElementById('upload-card').style.display = '';
+      document.getElementById('locked-card').style.display = 'none';
+    }
+
+    document.getElementById('photo-input').addEventListener('change', function () {
+      const file = this.files[0];
+      if (!file) return;
+      const preview = document.getElementById('preview');
+      const reader = new FileReader();
+      reader.onload = e => {
+        preview.src = e.target.result;
+        preview.style.display = 'block';
+      };
+      reader.readAsDataURL(file);
+      document.getElementById('pick-label').textContent = '✓ ' + file.name;
+    });
+
+    async function resizeImage(file, maxPx) {
+      return new Promise(resolve => {
+        const img = new Image();
+        const url = URL.createObjectURL(file);
+        img.onload = () => {
+          let w = img.width, h = img.height;
+          if (w > maxPx || h > maxPx) {
+            if (w > h) { h = Math.round(h * maxPx / w); w = maxPx; }
+            else { w = Math.round(w * maxPx / h); h = maxPx; }
+          }
+          const canvas = document.createElement('canvas');
+          canvas.width = w;
+          canvas.height = h;
+          canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+          canvas.toBlob(blob => { URL.revokeObjectURL(url); resolve(blob); }, 'image/jpeg', 0.88);
+        };
+        img.src = url;
+      });
+    }
+
+    async function toBase64(blob) {
+      return new Promise((res, rej) => {
+        const r = new FileReader();
+        r.onload = () => res(String(r.result).split(',')[1] || '');
+        r.onerror = rej;
+        r.readAsDataURL(blob);
+      });
+    }
+
+    async function upload() {
+      const input = document.getElementById('photo-input');
+      const btn = document.getElementById('upload-btn');
+      const statusEl = document.getElementById('upload-status');
+      const caption = document.getElementById('caption').value.trim();
+
+      if (!input.files[0]) {
+        statusEl.textContent = 'Please choose a photo first.';
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Resizing photo…';
+      statusEl.textContent = '';
+
+      try {
+        const blob = await resizeImage(input.files[0], 2000);
+        btn.textContent = 'Uploading…';
+        statusEl.textContent = 'Sending photo — this may take a moment…';
+
+        const b64 = await toBase64(blob);
+        const fd = new FormData();
+        fd.append('source', 'bettys-place-dayof');
+        fd.append('name', 'Satoy');
+        fd.append('message', caption || 'Day-of photo');
+        fd.append('photo_base64', b64);
+        fd.append('photo_filename', input.files[0].name || 'dayof.jpg');
+        fd.append('photo_mime_type', 'image/jpeg');
+
+        await fetch(ENDPOINT, { method: 'POST', mode: 'no-cors', body: fd });
+
+        statusEl.textContent = '✓ Photo uploaded! It will appear on the Day Of page within a minute.';
+        btn.textContent = 'Upload Another Photo';
+        btn.disabled = false;
+        input.value = '';
+        document.getElementById('preview').style.display = 'none';
+        document.getElementById('pick-label').textContent = '📷 Tap to choose a photo';
+        document.getElementById('caption').value = '';
+      } catch (err) {
+        statusEl.textContent = 'Upload failed. Check your connection and try again.';
+        btn.textContent = 'Try Again';
+        btn.disabled = false;
+      }
+    }
+  </script>
+</body>
+</html>

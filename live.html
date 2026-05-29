@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Day Of Photos | Victoria A. Satorre</title>
+  <meta name="description" content="Live photos from the memorial service for Victoria A. Satorre, May 30, 2026." />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .live-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 16px;
+    }
+    .live-photo {
+      border-radius: 16px;
+      overflow: hidden;
+      background: #f0e8dc;
+      box-shadow: 0 4px 16px rgba(50,35,23,.1);
+    }
+    .live-photo img {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      object-fit: cover;
+      display: block;
+    }
+    .live-caption {
+      padding: 12px 14px;
+      font-size: .9rem;
+      color: #4a3525;
+      line-height: 1.4;
+    }
+    .live-time {
+      font-size: .8rem;
+      color: #8a7060;
+      margin-top: 4px;
+    }
+    .live-empty {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 40px 20px;
+      color: #6a5040;
+      font-size: 1rem;
+    }
+    .live-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      font-size: .85rem;
+      color: #6a5040;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .pulse-dot {
+      display: inline-block;
+      width: 9px;
+      height: 9px;
+      background: #c0392b;
+      border-radius: 50%;
+      margin-right: 6px;
+      animation: pulse 1.5s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%       { opacity: .4; transform: scale(.75); }
+    }
+    .refresh-btn {
+      border: none;
+      background: #6d4c35;
+      color: #fff;
+      border-radius: 999px;
+      padding: 6px 16px;
+      font: inherit;
+      font-size: .85rem;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+
+    <nav class="site-nav" aria-label="Memorial site navigation">
+      <a href="index.html">Betty's Place</a>
+      <a href="announcements.html">Updates</a>
+      <a href="livestream.html">Livestream</a>
+      <a href="live.html">Day Of</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="share.html">Guest Book</a>
+      <a href="timeline.html">Timeline</a>
+      <a href="tributes.html">Tributes</a>
+    </nav>
+
+    <section class="hero compact" aria-labelledby="title">
+      <p class="eyebrow"><span class="pulse-dot" aria-hidden="true"></span>Live Updates</p>
+      <h1 id="title">Day Of Photos</h1>
+      <p class="intro">Photos shared by the family from May 30, 2026 — the day of the memorial service. This page refreshes automatically.</p>
+    </section>
+
+    <section class="card">
+      <div class="live-meta">
+        <span id="live-status">Loading…</span>
+        <button class="refresh-btn" onclick="loadPhotos()">Refresh now</button>
+      </div>
+      <div class="live-grid" id="photo-grid"></div>
+    </section>
+
+  </main>
+
+  <script>
+    const ENDPOINT = 'https://script.google.com/macros/s/AKfycbx1gmgJ0yJI8JuCsxDnasgsWLEL1YlyabbAAXDCj6OumPc0YPbPFpmHCvH0hrRWNEoEeg/exec';
+
+    function timeAgo(ts) {
+      if (!ts) return '';
+      const d = new Date(ts);
+      if (isNaN(d)) return '';
+      const mins = Math.round((Date.now() - d) / 60000);
+      if (mins < 1) return 'just now';
+      if (mins < 60) return mins + ' min ago';
+      const hrs = Math.floor(mins / 60);
+      return hrs === 1 ? '1 hr ago' : hrs + ' hrs ago';
+    }
+
+    function escapeHtml(s) {
+      return String(s || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    }
+
+    async function loadPhotos() {
+      const grid = document.getElementById('photo-grid');
+      const statusEl = document.getElementById('live-status');
+      try {
+        const res = await fetch(ENDPOINT + '?api=dayof');
+        const data = await res.json();
+        statusEl.textContent = 'Updated ' + new Date().toLocaleTimeString();
+        if (!data.ok || !data.items || !data.items.length) {
+          grid.innerHTML = '<p class="live-empty">Photos will appear here as the family shares them during the service. Check back soon — this page refreshes every minute.</p>';
+          return;
+        }
+        grid.innerHTML = data.items.map(item => `
+          <div class="live-photo">
+            <img
+              src="${escapeHtml(item.thumb)}"
+              alt="Photo from the memorial service"
+              loading="lazy"
+              onerror="this.style.display='none'"
+            />
+            <div class="live-caption">
+              ${item.caption ? escapeHtml(item.caption) : 'From the service'}
+              <div class="live-time">${timeAgo(item.timestamp)}</div>
+            </div>
+          </div>
+        `).join('');
+      } catch (err) {
+        statusEl.textContent = 'Could not reach server — tap Refresh to try again';
+        if (!grid.innerHTML.trim()) {
+          grid.innerHTML = '<p class="live-empty">Photos will appear here during the service. If nothing loads, the endpoint may still need the Apps Script update — see setup notes.</p>';
+        }
+      }
+    }
+
+    loadPhotos();
+    setInterval(loadPhotos, 60000);
+  </script>
+</body>
+</html>
