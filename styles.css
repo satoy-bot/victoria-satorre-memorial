@@ -497,6 +497,60 @@ fieldset {
   gap: 20px;
 }
 
+/* ── Live alert banner ─────────────────────────────────── */
+.live-alert-bar {
+  background: #1a100a;
+  color: #f5e6c8;
+  text-align: center;
+  padding: 11px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  font-family: var(--sans);
+  font-size: .82rem;
+  font-weight: 600;
+  letter-spacing: .04em;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+.live-alert-bar a {
+  color: #f5d478;
+  text-decoration: none;
+  border: 1px solid rgba(245, 212, 120, .45);
+  border-radius: 999px;
+  padding: 4px 13px;
+}
+.live-alert-bar a:hover { background: rgba(245, 212, 120, .12); }
+
+.live-dot {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  background: #e74c3c;
+  border-radius: 50%;
+  flex-shrink: 0;
+  animation: live-pulse 1.2s ease-in-out infinite;
+}
+
+.nav-live-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  background: #e74c3c;
+  border-radius: 50%;
+  margin-right: 4px;
+  vertical-align: middle;
+  animation: live-pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes live-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 0 0 rgba(231,76,60,.5); }
+  50%       { opacity: .8; transform: scale(.85); box-shadow: 0 0 0 5px rgba(231,76,60,0); }
+}
+
 .photo-grid figure { margin: 0; }
 
 .photo-grid img {
