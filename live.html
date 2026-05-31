@@ -3,10 +3,19 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Day Of Photos | Victoria A. Satorre</title>
-  <meta name="description" content="Live photos from the memorial service for Victoria A. Satorre, May 30, 2026." />
+  <title>Event Photos | Victoria A. Satorre</title>
+  <meta name="description" content="Photos from the memorial service for Victoria A. Satorre, May 30, 2026." />
   <link rel="stylesheet" href="styles.css" />
   <style>
+    .event-hero-photo {
+      width: 100%;
+      max-height: 480px;
+      object-fit: cover;
+      border-radius: 16px;
+      display: block;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 8px 32px rgba(50,35,23,.18);
+    }
     .live-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
@@ -42,39 +51,6 @@
       color: #6a5040;
       font-size: 1rem;
     }
-    .live-meta {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 16px;
-      font-size: .85rem;
-      color: #6a5040;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-    .pulse-dot {
-      display: inline-block;
-      width: 9px;
-      height: 9px;
-      background: #c0392b;
-      border-radius: 50%;
-      margin-right: 6px;
-      animation: pulse 1.5s infinite;
-    }
-    @keyframes pulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50%       { opacity: .4; transform: scale(.75); }
-    }
-    .refresh-btn {
-      border: none;
-      background: #6d4c35;
-      color: #fff;
-      border-radius: 999px;
-      padding: 6px 16px;
-      font: inherit;
-      font-size: .85rem;
-      cursor: pointer;
-    }
   </style>
 </head>
 <body>
@@ -83,8 +59,8 @@
     <nav class="site-nav" aria-label="Memorial site navigation">
       <a href="index.html">Betty's Place</a>
       <a href="announcements.html">Updates</a>
-      <a href="livestream.html">Livestream</a>
-      <a href="live.html">Live Updates</a>
+      <a href="livestream.html">Recording</a>
+      <a href="live.html">Event Photos</a>
       <a href="gallery.html">Gallery</a>
       <a href="share.html">Guest Book</a>
       <a href="timeline.html">Timeline</a>
@@ -92,23 +68,33 @@
     </nav>
 
     <section class="hero compact" aria-labelledby="title">
-      <p class="eyebrow"><span class="pulse-dot" aria-hidden="true"></span>Live Updates</p>
-      <h1 id="title">Day Of Photos</h1>
-      <p class="intro">Photos shared by the family from May 30, 2026 — the day of the memorial service. This page refreshes automatically.</p>
+      <p class="eyebrow">May 30, 2026 — Sacred Heart Roman Catholic Church</p>
+      <h1 id="title">Event Photos</h1>
+      <p class="intro">Photos from the memorial service for Victoria "Betty" Satorre, shared by family on the day of the service.</p>
+    </section>
+
+    <section class="card" style="text-align: center; background: #3d2410; color: #f5ede3; border-radius: 20px;">
+      <p style="color: #d4c4b0; margin-bottom: 1rem;">The full service recording is available on Facebook.</p>
+      <a class="button-link" href="https://www.facebook.com/501911263/videos/1469748417740761" target="_blank" rel="noopener" style="background: #c0392b; color: #fff; text-decoration: none; padding: 12px 24px; border-radius: 999px; font-weight: 600;">
+        ▶ Watch the Memorial Recording
+      </a>
     </section>
 
     <section class="card">
-      <div class="live-meta">
-        <span id="live-status">Loading…</span>
-        <button class="refresh-btn" onclick="loadPhotos()">Refresh now</button>
+      <h2>Photos from the Service</h2>
+      <div class="live-grid" id="photo-grid">
+        <p class="live-empty" id="loading-msg">Loading photos…</p>
       </div>
-      <div class="live-grid" id="photo-grid"></div>
     </section>
 
   </main>
 
   <script>
     const ENDPOINT = 'https://script.google.com/macros/s/AKfycbx1gmgJ0yJI8JuCsxDnasgsWLEL1YlyabbAAXDCj6OumPc0YPbPFpmHCvH0hrRWNEoEeg/exec';
+
+    function escapeHtml(s) {
+      return String(s || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    }
 
     function timeAgo(ts) {
       if (!ts) return '';
@@ -121,19 +107,13 @@
       return hrs === 1 ? '1 hr ago' : hrs + ' hrs ago';
     }
 
-    function escapeHtml(s) {
-      return String(s || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-    }
-
     async function loadPhotos() {
       const grid = document.getElementById('photo-grid');
-      const statusEl = document.getElementById('live-status');
       try {
         const res = await fetch(ENDPOINT + '?api=dayof');
         const data = await res.json();
-        statusEl.textContent = 'Updated ' + new Date().toLocaleTimeString();
         if (!data.ok || !data.items || !data.items.length) {
-          grid.innerHTML = '<p class="live-empty">Photos will appear here as the family shares them during the service. Check back soon — this page refreshes every minute.</p>';
+          grid.innerHTML = '<p class="live-empty">No event photos have been uploaded yet.</p>';
           return;
         }
         grid.innerHTML = data.items.map(item => `
@@ -151,15 +131,11 @@
           </div>
         `).join('');
       } catch (err) {
-        statusEl.textContent = 'Could not reach server — tap Refresh to try again';
-        if (!grid.innerHTML.trim()) {
-          grid.innerHTML = '<p class="live-empty">Photos will appear here during the service. If nothing loads, the endpoint may still need the Apps Script update — see setup notes.</p>';
-        }
+        grid.innerHTML = '<p class="live-empty">Photos could not be loaded. Please try refreshing the page.</p>';
       }
     }
 
     loadPhotos();
-    setInterval(loadPhotos, 60000);
   </script>
 </body>
 </html>
