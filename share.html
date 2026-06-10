@@ -45,7 +45,11 @@
         </div>
         <label>Relationship / how you knew Betty<input type="text" name="relationship" placeholder="Family, friend, colleague, neighbor…" /></label>
         <label>Dedication, message, prayer, or memory <span aria-hidden="true">*</span><textarea name="message" rows="6" required placeholder="Share a dedication, memory, condolence, prayer, or note for the family."></textarea></label>
-        <label>Photo to share <span class="field-note">optional, one image up to 8 MB</span><input type="file" name="photo" accept="image/*" /></label>
+        <label>Photo to share <span class="field-note">optional, one image up to 8 MB — choose a file, or paste an image (Ctrl/⌘+V)</span><input type="file" name="photo" accept="image/*" /></label>
+        <div id="photo-paste-zone" tabindex="0" role="button" aria-label="Paste an image from your clipboard">
+          📋 You can also <strong>paste a picture directly</strong> here (Ctrl/⌘+V)
+        </div>
+        <p id="photo-preview-wrap" hidden>Selected: <span id="photo-preview-name"></span> <button type="button" id="photo-clear" class="link-button">remove</button></p>
         <fieldset>
           <legend>Permissions</legend>
           <label class="checkbox"><input type="checkbox" name="update_permission" value="yes" /> Yes, the family may contact me with memorial updates.</label>
@@ -79,6 +83,56 @@
         reader.readAsDataURL(file);
       });
     }
+
+    // --- Paste / pick a picture directly ---
+    const photoInput = form.querySelector('input[name="photo"]');
+    const pasteZone = document.getElementById('photo-paste-zone');
+    const previewWrap = document.getElementById('photo-preview-wrap');
+    const previewName = document.getElementById('photo-preview-name');
+    const clearBtn = document.getElementById('photo-clear');
+
+    function setPhotoFile(file) {
+      if (!file) return;
+      if (!file.type || !file.type.startsWith('image/')) {
+        statusEl.textContent = 'That does not look like an image. Please paste or choose a picture.';
+        return;
+      }
+      try {
+        const dt = new DataTransfer();
+        dt.items.add(file);
+        photoInput.files = dt.files;
+      } catch (e) { /* older browsers: input.files stays as-is, paste fallback below */ }
+      previewName.textContent = file.name || 'pasted-image';
+      previewWrap.hidden = false;
+      statusEl.textContent = '';
+    }
+
+    photoInput.addEventListener('change', () => {
+      const f = photoInput.files[0];
+      if (f) { previewName.textContent = f.name; previewWrap.hidden = false; }
+    });
+
+    clearBtn.addEventListener('click', () => {
+      photoInput.value = '';
+      previewWrap.hidden = true;
+      previewName.textContent = '';
+    });
+
+    function handlePaste(event) {
+      const items = (event.clipboardData || window.clipboardData)?.items || [];
+      for (const item of items) {
+        if (item.kind === 'file' && item.type.startsWith('image/')) {
+          const blob = item.getAsFile();
+          const ext = (item.type.split('/')[1] || 'png').replace('jpeg', 'jpg');
+          const named = new File([blob], 'pasted-' + Date.now() + '.' + ext, { type: item.type });
+          setPhotoFile(named);
+          event.preventDefault();
+          return;
+        }
+      }
+    }
+    document.addEventListener('paste', handlePaste);
+    pasteZone.addEventListener('click', () => photoInput.click());
 
     form.addEventListener('submit', async (event) => {
       event.preventDefault();

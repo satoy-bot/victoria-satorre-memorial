@@ -838,3 +838,21 @@ footer {
   .quick-links,
   .loved-grid { grid-template-columns: 1fr; }
 }
+
+/* --- Guest book: paste-a-picture zone + live approved memories feed (added 2026-06-10) --- */
+#photo-paste-zone {
+  margin: 6px 0 2px; padding: 14px; border: 1.5px dashed #c9b49c; border-radius: 12px;
+  background: #fbf6ef; color: #6a5849; font-size: .92rem; text-align: center; cursor: pointer;
+}
+#photo-paste-zone:focus, #photo-paste-zone:hover { border-color: #6d4c35; background: #f6ece0; outline: none; }
+#photo-preview-wrap { font-size: .9rem; color: #6a5849; margin: 6px 0 0; }
+.link-button { background: none; border: 0; color: #9f3f36; cursor: pointer; text-decoration: underline; font: inherit; padding: 0; }
+.memory-feed { display: grid; gap: 14px; margin-top: 6px; }
+.memory-item { border: 1px solid #e2d3c2; border-radius: 16px; padding: 14px 16px; background: #fffaf4; }
+.memory-item blockquote { margin: 0 0 8px; }
+.memory-item .memory-photo { width: 100%; max-width: 360px; border-radius: 12px; margin: 8px 0; display: block; }
+.memory-item .memory-author { font-weight: 600; color: #6d4c35; margin: 4px 0 0; }
+.memory-item .memory-date { font-size: .82rem; color: #8b7a6c; }
+.memory-empty { color: #8b7a6c; font-style: italic; }
+.gallery-shared-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; margin-top: 8px; }
+.gallery-shared-grid img { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 12px; border: 1px solid #e2d3c2; }

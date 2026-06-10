@@ -38,6 +38,15 @@
       <p><a class="button-link" href="share.html">Share Your Tribute</a></p>
     </section>
 
+    <section class="card" id="guestbook-memories" aria-labelledby="guestbook-memories-title">
+      <p class="eyebrow">From the Guest Book</p>
+      <h2 id="guestbook-memories-title">Memories Shared by Family &amp; Friends</h2>
+      <p>These dedications and photos were shared through Betty’s Place guest book and posted after review. Contact information is always kept private.</p>
+      <div class="memory-feed" id="memory-feed" aria-live="polite">
+        <p class="memory-empty" id="memory-empty">Loading shared memories…</p>
+      </div>
+    </section>
+
     <section class="card" id="facebook-condolences" aria-labelledby="facebook-condolences-title">
       <p class="eyebrow">Messages from Facebook</p>
       <h2 id="facebook-condolences-title">Condolences Shared with the Family</h2>
@@ -114,5 +123,42 @@
       <p>Messages submitted through the guest book are private to the family first. After review, the family may choose selected dedications, messages, or photos to share publicly on this page. Contact information is not displayed publicly.</p>
     </section>
   </main>
+
+  <script>
+    // Live approved guest-book memories (JSONP — no CORS). Only entries the family
+    // approved AND the guest gave public permission for are ever returned by the backend.
+    (function () {
+      var ENDPOINT = 'https://script.google.com/macros/s/AKfycbx1gmgJ0yJI8JuCsxDnasgsWLEL1YlyabbAAXDCj6OumPc0YPbPFpmHCvH0hrRWNEoEeg/exec';
+      var feed = document.getElementById('memory-feed');
+      var empty = document.getElementById('memory-empty');
+
+      function esc(s) {
+        return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+          return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c];
+        });
+      }
+      function driveThumb(url) {
+        var m = String(url || '').match(/[-\w]{25,}/);
+        return m ? 'https://drive.google.com/thumbnail?id=' + m[0] + '&sz=w600' : '';
+      }
+      window.__vicMemories = function (data) {
+        var items = (data && data.items) || [];
+        if (!items.length) { empty.textContent = 'Memories shared through the guest book will appear here after review.'; return; }
+        empty.remove();
+        feed.innerHTML = items.map(function (it) {
+          var photo = it.photoUrl ? '<img class="memory-photo" loading="lazy" src="' + esc(driveThumb(it.photoUrl)) + '" alt="Photo shared by ' + esc(it.name || 'a guest') + '">' : '';
+          var rel = it.relationship ? ' · ' + esc(it.relationship) : '';
+          var msg = it.message ? '<blockquote><p>' + esc(it.message).replace(/\n/g, '<br>') + '</p></blockquote>' : '';
+          return '<article class="memory-item">' + msg + photo +
+            '<p class="memory-author">— ' + esc(it.name || 'A friend') + rel + '</p>' +
+            (it.date ? '<p class="memory-date">' + esc(it.date) + '</p>' : '') + '</article>';
+        }).join('');
+      };
+      var s = document.createElement('script');
+      s.src = ENDPOINT + '?api=public&callback=__vicMemories&_=' + Date.now();
+      s.onerror = function () { empty.textContent = 'Memories shared through the guest book will appear here after review.'; };
+      document.body.appendChild(s);
+    })();
+  </script>
 </body>
 </html>
